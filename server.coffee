@@ -14,7 +14,6 @@ start = (route, handle)->
       console.log "Received POST data chunk '#{postDataChunk}'."
 
     request.addListener "end", ->
-      #decodedPostData = new Buffer("#{postData}", 'base64').toString()
       route handle, pathname, response, postData
 
   http.createServer(onRequest).listen 8888
