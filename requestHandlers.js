@@ -4,7 +4,7 @@
   exec = require("child_process").exec;
 
   start = function(response) {
-    var content, sleep;
+    var sleep;
     console.log("Request handler 'start' was called.");
     sleep = function(milliSeconds) {
       var results, startTime;
@@ -15,16 +15,16 @@
       }
       return results;
     };
-    content = "empty!!";
-    exec("sleep 10; ls -ltrh", (function(error, stdout, stderr) {
-      content = stdout;
-      return content;
+    return exec("sleep 5;ls -ltrh", {
+      timeout: 10000,
+      maxBuffer: 20000 * 1024
+    }, (function(error, stdout, stderr) {
+      response.writeHead(200, {
+        "Content-Type": "text/plain"
+      });
+      response.write(stdout);
+      return response.end();
     }));
-    response.writeHead(200, {
-      "Content-Type": "text/plain"
-    });
-    response.write(content);
-    return response.end();
   };
 
   upload = function(response) {

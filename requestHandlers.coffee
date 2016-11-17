@@ -8,15 +8,13 @@ start = (response) ->
     while new Date().getTime() < startTime + milliSeconds
       continue
 
-  content = "empty!!"
-
-  exec "sleep 10; ls -ltrh", ((error, stdout, stderr) ->
-    content = stdout
-    return content
+  exec "sleep 5;ls -ltrh", { timeout: 10000, maxBuffer: 20000*1024 },
+  ((error, stdout, stderr) ->
+    response.writeHead 200, {"Content-Type": "text/plain"}
+    response.write stdout
+    response.end()
     )
-  response.writeHead 200, {"Content-Type": "text/plain"}
-  response.write content
-  response.end()
+
 
 upload = (response) ->
   console.log "Request handler 'upload' was called."
